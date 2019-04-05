@@ -100,10 +100,13 @@ export default {
 
   methods: {
     handleChange(value) {
+        value = value.map(value => {
+            return moment(value).format(this.toMomentsFormat(this.dateFormat))
+        });
         this.$store.commit(`${this.resourceName}/updateFilterState`, {
             filterClass: this.filterKey,
             value,
-        })
+        });
         this.$emit('change')
     },
     toMomentsFormat(format){
