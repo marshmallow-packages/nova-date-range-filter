@@ -1,6 +1,6 @@
 {
-  "name": "64robots/nova-date-filter",
-  "description": "A Laravel Nova date filter.",
+  "name": "ampeco/nova-date-range-filter",
+  "description": "A Laravel Nova date range filter.",
   "keywords": [
     "laravel",
     "nova",
@@ -13,13 +13,13 @@
   },
   "autoload": {
     "psr-4": {
-      "R64\\Filters\\": "src/"
+      "ampeco\\Filters\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "R64\\Filters\\FieldServiceProvider"
+        "ampeco\\Filters\\FieldServiceProvider"
       ]
     }
   },

@@ -1,6 +1,6 @@
 <?php
 
-namespace R64\Filters;
+namespace ampeco\Filters;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
@@ -16,7 +16,7 @@ class FieldServiceProvider extends ServiceProvider
     public function boot()
     {
         Nova::serving(function (ServingNova $event) {
-            Nova::script('nova-custom-filters', __DIR__.'/../dist/js/custom-filters.js');
+            Nova::script('nova-date-range-filter', __DIR__.'/../dist/js/date-range-filter.js');
         });
     }
 
