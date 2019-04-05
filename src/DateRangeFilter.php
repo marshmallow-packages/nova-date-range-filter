@@ -1,6 +1,6 @@
 <?php
 
-namespace ampeco\Filters;
+namespace Ampeco\Filters;
 
 use Illuminate\Http\Request;
 use Laravel\Nova\Filters\Filter;

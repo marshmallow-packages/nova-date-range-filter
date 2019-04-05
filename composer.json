@@ -13,13 +13,13 @@
   },
   "autoload": {
     "psr-4": {
-      "ampeco\\Filters\\": "src/"
+      "Ampeco\\Filters\\": "src/"
     }
   },
   "extra": {
     "laravel": {
       "providers": [
-        "ampeco\\Filters\\FieldServiceProvider"
+        "Ampeco\\Filters\\FieldServiceProvider"
       ]
     }
   },
