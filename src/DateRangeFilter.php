@@ -8,13 +8,13 @@ use Laravel\Nova\Filters\Filter;
 abstract class DateRangeFilter extends Filter
 {
     public $component = 'date-range-filter';
-    
+
     public function __construct()
     {
         $this->dateFormat('Y-m-d');
     }
-    
-    
+
+
     /**
      * Get the filter's available options.
      *
@@ -25,13 +25,14 @@ abstract class DateRangeFilter extends Filter
     {
         //
     }
-    
-    public function dateFormat($format){
-        $this->withMeta(['dateFormat' => $format]);
+
+    public function dateFormat($format)
+    {
+        return $this->withMeta(['dateFormat' => $format]);
     }
-    
+
     public function placeholder($placeholder)
     {
-        $this->withMeta(['placeholder' => $placeholder]);
+        return $this->withMeta(['placeholder' => $placeholder]);
     }
 }
