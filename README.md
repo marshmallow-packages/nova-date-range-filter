@@ -16,10 +16,13 @@ use Ampeco\Filters\DateRangeFilter;
 
 class DateRange extends DateRangeFilter
 {
-  $from = Carbon::parse($value[0]);
-  $to = Carbon::parse($value[1]);
-  //
-  return $query;
+    public function apply(Request $request, $query, $value)
+    {
+        $from = Carbon::parse($value[0]);
+        $to = Carbon::parse($value[1]);
+        //
+        return $query;
+    }
 }
 ```
 
