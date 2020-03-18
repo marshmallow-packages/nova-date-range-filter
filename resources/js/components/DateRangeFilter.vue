@@ -38,6 +38,18 @@ export default {
     placeholder() {
       return this.filter.placeholder || this.__('Pick a date range')
     },
+    startDate() {
+      return flatpickr.formatDate(flatpickr.parseDate(this.filter.currentValue[0], 'Y-m-d'), this.dateFormat)
+    },
+    endDate() {
+      return flatpickr.formatDate(flatpickr.parseDate(this.filter.currentValue[1], 'Y-m-d'), this.dateFormat)
+    },
+    value() {
+      if (typeof this.filter.currentValue === 'object' && this.filter.currentValue.length >= 2){
+        return `${this.startDate} ${this.separator} ${this.endDate}`
+      }
+      return this.filter.currentValue || null
+    },
     filter() {
       return this.$store.getters[`${this.resourceName}/getFilter`](this.filterKey)
     },

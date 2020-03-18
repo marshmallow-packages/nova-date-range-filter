@@ -637,6 +637,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_0_flatpickr___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_0_flatpickr__);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__airbnb_modified_css__ = __webpack_require__(11);
 /* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__airbnb_modified_css___default = __webpack_require__.n(__WEBPACK_IMPORTED_MODULE_1__airbnb_modified_css__);
+var _typeof = typeof Symbol === "function" && typeof Symbol.iterator === "symbol" ? function (obj) { return typeof obj; } : function (obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; };
+
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 //
@@ -680,6 +682,18 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
   computed: {
     placeholder: function placeholder() {
       return this.filter.placeholder || this.__('Pick a date range');
+    },
+    startDate: function startDate() {
+      return __WEBPACK_IMPORTED_MODULE_0_flatpickr___default.a.formatDate(__WEBPACK_IMPORTED_MODULE_0_flatpickr___default.a.parseDate(this.filter.currentValue[0], 'Y-m-d'), this.dateFormat);
+    },
+    endDate: function endDate() {
+      return __WEBPACK_IMPORTED_MODULE_0_flatpickr___default.a.formatDate(__WEBPACK_IMPORTED_MODULE_0_flatpickr___default.a.parseDate(this.filter.currentValue[1], 'Y-m-d'), this.dateFormat);
+    },
+    value: function value() {
+      if (_typeof(this.filter.currentValue) === 'object' && this.filter.currentValue.length >= 2) {
+        return this.startDate + ' ' + this.separator + ' ' + this.endDate;
+      }
+      return this.filter.currentValue || null;
     },
     filter: function filter() {
       return this.$store.getters[this.resourceName + '/getFilter'](this.filterKey);
