@@ -3,15 +3,15 @@
     <h3 class="text-sm uppercase tracking-wide text-80 bg-30 p-3">{{ filter.name }}</h3>
 
     <div class="p-2">
-  <input
-    class="w-full form-control form-input form-input-bordered"
-    :disabled="disabled"
-    :class="{'!cursor-not-allowed': disabled}"
-    :value="value"
-    ref="datePicker"
-    type="text"
-    :placeholder="placeholder"
-  >
+      <input
+        class="w-full form-control form-input form-input-bordered"
+        :disabled="disabled"
+        :class="{'!cursor-not-allowed': disabled}"
+        :value="value"
+        ref="datePicker"
+        type="text"
+        :placeholder="placeholder"
+      />
     </div>
   </div>
 </template>
@@ -21,14 +21,14 @@ import '../../airbnb-modified.css'
 
 export default {
   props: {
-      resourceName: {
-          type: String,
-          required: true,
-      },
-      filterKey: {
-          type: String,
-          required: true,
-      },
+    resourceName: {
+      type: String,
+      required: true,
+    },
+    filterKey: {
+      type: String,
+      required: true,
+    },
 
   },
 
@@ -38,23 +38,31 @@ export default {
     placeholder() {
       return this.filter.placeholder || this.__('Pick a date range')
     },
-
+    startDate() {
+      return flatpickr.formatDate(flatpickr.parseDate(this.filter.currentValue[0], 'Y-m-d'), this.dateFormat)
+    },
+    endDate() {
+      return flatpickr.formatDate(flatpickr.parseDate(this.filter.currentValue[1], 'Y-m-d'), this.dateFormat)
+    },
     value() {
       if (typeof this.filter.currentValue === 'object' && this.filter.currentValue.length >= 2){
-          return moment(this.filter.currentValue[0]).format(this.toMomentsFormat(this.dateFormat))+
-              ' '+this.separator+' '+
-              moment(this.filter.currentValue[1]).format(this.toMomentsFormat(this.dateFormat));
+        return `${this.startDate} ${this.separator} ${this.endDate}`
       }
-        return this.filter.currentValue || null
+      return this.filter.currentValue || null
     },
     filter() {
-        return this.$store.getters[`${this.resourceName}/getFilter`](this.filterKey)
+      return this.$store.getters[`${this.resourceName}/getFilter`](this.filterKey)
+    },
+    options() {
+      return this.$store.getters[`${this.resourceName}/getOptionsForFilter`](
+        this.filterKey
+      )
     },
     disabled() {
       return this.filter.disabled
     },
     separator() {
-        return this.filter.separator || '-'
+      return this.filter.separator || '-'
     },
 
     dateFormat() {
@@ -71,11 +79,18 @@ export default {
 
     enableSeconds() {
       return this.filter.enableSeconds
+    },
+
+    firstDayOfWeek() {
+      return this.filter.firstDayOfWeek || 0
     }
   },
 
   mounted() {
     const self = this
+    this.options.forEach((option) => {
+      Object.assign(this.filter, {[option.name]: option.value})
+    })
     this.$nextTick(() => {
       this.flatpickr = flatpickr(this.$refs.datePicker, {
         enableTime: this.enableTime,
@@ -89,33 +104,25 @@ export default {
         onReady() {
           self.$refs.datePicker.parentNode.classList.add('date-filter')
         },
-          locale: {
-              rangeSeparator: ` ${this.separator} `
-          }
+        locale: {
+          rangeSeparator: ` ${this.separator} `,
+          firstDayOfWeek: this.firstDayOfWeek
+        }
       })
-      const wrapper = document.querySelector('.dropdown-menu div')
-      wrapper.classList.remove('overflow-hidden')
     })
   },
 
   methods: {
     handleChange(value) {
-        value = value.map(value => {
-            return moment(value).format(this.toMomentsFormat(this.dateFormat))
-        });
-        this.$store.commit(`${this.resourceName}/updateFilterState`, {
-            filterClass: this.filterKey,
-            value,
-        });
-        this.$emit('change')
+      value = value.map(value => {
+        return flatpickr.formatDate(value, 'Y-m-d')
+      });
+      this.$store.commit(`${this.resourceName}/updateFilterState`, {
+        filterClass: this.filterKey,
+        value,
+      });
+      this.$emit('change')
     },
-    toMomentsFormat(format){
-        var res=format;
-        res = res.replace('Y', 'YYYY');
-        res = res.replace('m', 'MM');
-        res = res.replace('d', 'DD');
-        return res;
-    }
   }
 }
 </script>
