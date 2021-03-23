@@ -68,7 +68,7 @@ export default {
         return (this.filter.mode === 'range') ? 'range' : 'single'
     },
     dateFormat() {
-      return (this.filter.enableTime) ? this.filter.dateFormat : 'Y-m-d'
+        return this.filter.dateFormat || (this.filter.enableTime ? 'Y-m-d H:i' : 'Y-m-d')
     },
     twelveHourTime() {
       return this.filter.twelveHourTime
