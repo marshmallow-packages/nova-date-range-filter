@@ -13,6 +13,16 @@ abstract class DateRangeFilter extends Filter
         $this->dateFormat('Y-m-d');
     }
 
+    public function enableTime()
+    {
+        return $this->withMeta(['enableTime' => true]);
+    }
+
+    public function modeFormat()
+    {
+        return $this->withMeta(['mode' => $this->mode]);
+    }
+
     public function dateFormat($format)
     {
         return $this->withMeta(['dateFormat' => $format]);
