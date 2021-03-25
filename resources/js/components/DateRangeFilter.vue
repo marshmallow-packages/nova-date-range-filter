@@ -39,10 +39,10 @@ export default {
       return this.filter.placeholder || this.__('Pick a date range')
     },
     startDate() {
-      return flatpickr.formatDate(flatpickr.parseDate(this.filter.currentValue[0], 'Y-m-d'), this.dateFormat)
+      return flatpickr.formatDate(flatpickr.parseDate(this.filter.currentValue[0], this.dateFormat), this.dateFormat)
     },
     endDate() {
-      return flatpickr.formatDate(flatpickr.parseDate(this.filter.currentValue[1], 'Y-m-d'), this.dateFormat)
+      return flatpickr.formatDate(flatpickr.parseDate(this.filter.currentValue[1], this.dateFormat), this.dateFormat)
     },
     value() {
       if (typeof this.filter.currentValue === 'object' && this.filter.currentValue.length >= 2){
@@ -64,23 +64,21 @@ export default {
     separator() {
       return this.filter.separator || '-'
     },
-
-    dateFormat() {
-      return this.filter.dateFormat || 'Y-m-d'
+    modeType() {
+        return (this.filter.mode === 'range') ? 'range' : 'single'
     },
-
+    dateFormat() {
+        return this.filter.dateFormat || (this.filter.enableTime ? 'Y-m-d H:i' : 'Y-m-d')
+    },
     twelveHourTime() {
       return this.filter.twelveHourTime
     },
-
     enableTime() {
       return this.filter.enableTime
     },
-
     enableSeconds() {
       return this.filter.enableSeconds
     },
-
     firstDayOfWeek() {
       return this.filter.firstDayOfWeek || 0
     }
@@ -99,7 +97,7 @@ export default {
         dateFormat: this.dateFormat,
         allowInput: true,
         // static: true,
-        mode: 'range',
+        mode: this.modeType,
         time_24hr: !this.twelveHourTime,
         onReady() {
           self.$refs.datePicker.parentNode.classList.add('date-filter')
@@ -114,14 +112,17 @@ export default {
 
   methods: {
     handleChange(value) {
-      value = value.map(value => {
-        return flatpickr.formatDate(value, 'Y-m-d')
-      });
-      this.$store.commit(`${this.resourceName}/updateFilterState`, {
-        filterClass: this.filterKey,
-        value,
-      });
-      this.$emit('change')
+        setTimeout(() => {
+            value = value.map(value => {
+                return flatpickr.formatDate(value, this.dateFormat)
+            })
+
+            this.$store.commit(`${this.resourceName}/updateFilterState`, {
+                filterClass: this.filterKey,
+                value,
+            });
+            this.$emit('change')
+        }, 100)
     },
   }
 }

@@ -8,18 +8,22 @@ abstract class DateRangeFilter extends Filter
 {
     public $component = 'date-range-filter';
 
-    public function __construct()
+
+    public function enableTime()
     {
-        $this->dateFormat('Y-m-d');
+        $this->withMeta(['enableTime' => true]);
+        return $this;
     }
 
     public function dateFormat($format)
     {
-        return $this->withMeta(['dateFormat' => $format]);
+        $this->withMeta(['dateFormat' => $format]);
+        return $this;
     }
 
     public function placeholder($placeholder)
     {
-        return $this->withMeta(['placeholder' => $placeholder]);
+        $this->withMeta(['placeholder' => $placeholder]);
+        return $this;
     }
 }
