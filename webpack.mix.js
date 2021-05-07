@@ -1,7 +1,5 @@
-let mix = require('laravel-mix');
+let mix = require("laravel-mix");
 
-mix.js('resources/js', 'dist/js/date-range-filter.js').webpackConfig({
-  resolve: {
-    symlinks: false
-  }
-});
+mix.setPublicPath("dist")
+    .js("resources/js", "js/nova-date-range-filter.js")
+    .vue();

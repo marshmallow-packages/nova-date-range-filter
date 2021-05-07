@@ -5,50 +5,17 @@ Nova filter that displays a Date Range Picker instead of a select.
 ### Install
 
 Run this command in your nova project:
-`composer require ampeco/nova-date-range-filter`
+`composer require marshmallow/nova-date-range-filter`
 
 ### How to use
 
 Just use DateRangeFilter class instead of Filter
 
 ```php
-use Ampeco\Filters\DateRangeFilter;
-
-class DateRange extends DateRangeFilter
-{
-    public function apply(Request $request, $query, $value)
+ public function filters(Request $request)
     {
-        $from = Carbon::parse($value[0])->startOfDay();
-        $to = Carbon::parse($value[1])->endOfDay();
-
-        return $query->whereBetween('created_at', [$from, $to]);
+        return [
+            new \Marshmallow\Filters\DateRangeFilter('created_at', 'Created date'),
+        ];
     }
-
-    /**
-     * Get the filter's available options.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return array
-     */
-    // public function options(Request $request)
-    // {
-    //     return [
-    //         'firstDayOfWeek' => 0,
-    //         'separator' => '-',
-    //         'enableTime' => false,
-    //         'enableSeconds' => false,
-    //         'twelveHourTime' => false
-    //     ];
-    // }
-}
-```
-
-### Customization
-
-Use fluent interface to configure your DateRange filter
-
-```php
-
-(new DateRange)->placeholder("Placeholder")->dateFormat("m d Y")
-
 ```

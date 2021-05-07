@@ -1,12 +1,12 @@
 <?php
 
-namespace Ampeco\Filters;
+namespace Marshmallow\Filters;
 
 use Laravel\Nova\Nova;
 use Laravel\Nova\Events\ServingNova;
 use Illuminate\Support\ServiceProvider;
 
-class FieldServiceProvider extends ServiceProvider
+class FilterServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
@@ -16,7 +16,7 @@ class FieldServiceProvider extends ServiceProvider
     public function boot()
     {
         Nova::serving(function (ServingNova $event) {
-            Nova::script('nova-date-range-filter-2021-03-23', __DIR__.'/../dist/js/date-range-filter.js');
+            Nova::script('nova-date-range-filter', __DIR__ . '/../dist/js/nova-date-range-filter.js');
         });
     }
 
