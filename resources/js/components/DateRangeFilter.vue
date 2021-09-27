@@ -117,7 +117,7 @@ export default {
                 return flatpickr.formatDate(value, this.dateFormat)
             })
 
-            if (Object.keys(value).length === 0) {
+            if (Object.keys(value).length !== 0) {
                 this.$store.commit(`${this.resourceName}/updateFilterState`, {
                     filterClass: this.filterKey,
                     value,
