@@ -122,14 +122,8 @@ export default {
                     filterClass: this.filterKey,
                     value,
                 });
-            } else {
-                this.$store.dispatch(`${this.resourceName}/resetFilterState`, {
-                    filterClass: this.filterKey,
-                    value,
-                });
+                this.$emit('change')
             }
-
-            this.$emit('change')
         }, 100)
     },
   }
