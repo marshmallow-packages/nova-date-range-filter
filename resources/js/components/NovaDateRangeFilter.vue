@@ -136,7 +136,6 @@
                         firstDayOfWeek: this.firstDayOfWeek,
                     },
                 });
-                console.log(this.flatpickr);
             });
         },
 
