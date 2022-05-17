@@ -4,6 +4,7 @@ namespace Marshmallow\Filters;
 
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Filters\Filter;
 
 class DateRangeFilter extends Filter
@@ -35,7 +36,7 @@ class DateRangeFilter extends Filter
      * @param  mixed  $value
      * @return \Illuminate\Database\Eloquent\Builder
      */
-    public function apply(Request $request, $query, $value)
+    public function apply(NovaRequest $request, $query, $value)
     {
         $from = Carbon::parse($value[0])->startOfDay();
         if (count($value) == 1) {
@@ -65,7 +66,7 @@ class DateRangeFilter extends Filter
         return $this;
     }
 
-    public function options(Request $request)
+    public function options(NovaRequest $request)
     {
         return [
             'firstDayOfWeek' => 1,

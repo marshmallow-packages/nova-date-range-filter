@@ -1,27 +1,32 @@
 <template>
-    <div>
-        <h3 class="text-sm uppercase tracking-wide text-80 bg-30 p-3">
+    <FilterContainer>
+        <span>
             {{ filter.name }}
-        </h3>
+        </span>
 
-        <div class="p-2">
+        <template #filter>
             <input
-                class="w-full form-control form-input form-input-bordered"
+                class="w-full flex form-control form-control-sm form-input form-input-bordered"
                 :disabled="disabled"
                 :class="{ '!cursor-not-allowed': disabled }"
                 :value="value"
-                ref="datePicker"
-                type="text"
                 :placeholder="placeholder"
+                ref="dateRangePicker"
+                name="date-range-filter"
+                autocomplete="off"
+                type="text"
+                :dusk="`${filter.name}-date-range-filter`"
             />
-        </div>
-    </div>
+        </template>
+    </FilterContainer>
 </template>
 <script>
     import flatpickr from "flatpickr";
-    import "../../sass/template-modified.scss";
+    require("flatpickr/dist/themes/airbnb.css");
 
     export default {
+        emits: ["change"],
+
         props: {
             resourceName: {
                 type: String,
@@ -31,6 +36,7 @@
                 type: String,
                 required: true,
             },
+            lens: String,
         },
 
         data: () => ({ flatpickr: null }),
@@ -108,21 +114,21 @@
         mounted() {
             const self = this;
             this.options.forEach((option) => {
-                Object.assign(this.filter, { [option.name]: option.value });
+                Object.assign(this.filter, { [option.label]: option.value });
             });
+
             this.$nextTick(() => {
-                this.flatpickr = flatpickr(this.$refs.datePicker, {
+                this.flatpickr = flatpickr(this.$refs.dateRangePicker, {
                     enableTime: this.enableTime,
                     enableSeconds: this.enableSeconds,
                     onClose: this.handleChange,
                     dateFormat: this.dateFormat,
                     allowInput: true,
-                    // static: true,
                     mode: this.modeType,
                     time_24hr: !this.twelveHourTime,
                     onReady() {
-                        self.$refs.datePicker.parentNode.classList.add(
-                            "date-filter"
+                        self.$refs.dateRangePicker.parentNode.classList.add(
+                            "date-range-filter"
                         );
                     },
                     locale: {
@@ -130,30 +136,27 @@
                         firstDayOfWeek: this.firstDayOfWeek,
                     },
                 });
+                console.log(this.flatpickr);
             });
         },
 
         methods: {
-            handleChange(value) {
-                setTimeout(() => {
-                    value = value.map((value) => {
-                        return flatpickr.formatDate(value, this.dateFormat);
-                    });
+            handleChange(event) {
+                let value = event.map((value) => {
+                    return flatpickr.formatDate(value, this.dateFormat);
+                });
 
-                    this.$store.commit(
-                        `${this.resourceName}/updateFilterState`,
-                        {
-                            filterClass: this.filterKey,
-                            value,
-                        }
-                    );
-                    this.$emit("change");
-                }, 100);
+                this.$store.commit(`${this.resourceName}/updateFilterState`, {
+                    filterClass: this.filterKey,
+                    value,
+                });
+
+                this.$emit("change");
             },
         },
     };
 </script>
-<style scoped>
+<style scoped lang="scss">
     .\!cursor-not-allowed {
         cursor: not-allowed !important;
     }
