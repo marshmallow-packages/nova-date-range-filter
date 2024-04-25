@@ -16,6 +16,8 @@ class DateRangeFilter extends Filter
      */
     public $component = 'nova-date-range-filter';
 
+    protected string $column;
+
     /**
      * Create a new filter instance.
      *
