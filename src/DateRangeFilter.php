@@ -62,6 +62,24 @@ class DateRangeFilter extends Filter
         return $this;
     }
 
+    public function showMonths($months)
+    {
+        $this->withMeta(['showMonths' => $months]);
+        return $this;
+    }
+
+    public function minTime($minTime)
+    {
+        $this->withMeta(['minTime' => $minTime]);
+        return $this;
+    }
+
+    public function maxTime($maxTime)
+    {
+        $this->withMeta(['maxTime' => $maxTime]);
+        return $this;
+    }
+
     public function placeholder($placeholder)
     {
         $this->withMeta(['placeholder' => $placeholder]);
