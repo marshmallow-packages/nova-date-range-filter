@@ -1,6 +1,6 @@
 ## Date Range Filter for Laravel Nova
 
-Nova filter that displays a Date Range Picker instead of a select.
+Nova filter that displays a Date Range Picker instead of a select. This field also supports dark-mode!
 
 ### Install
 
