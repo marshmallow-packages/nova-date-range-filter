@@ -17,6 +17,7 @@ class FilterServiceProvider extends ServiceProvider
     {
         Nova::serving(function (ServingNova $event) {
             Nova::script('nova-date-range-filter', __DIR__ . '/../dist/js/nova-date-range-filter.js');
+            Nova::style('nova-date-range-filter', __DIR__ . '/../dist/css/dark.css');
         });
     }
 

@@ -5,6 +5,7 @@ require("./mix");
 
 mix.setPublicPath("dist")
     .js("resources/js/index.js", "js/nova-date-range-filter.js")
+     .css('resources/css/dark.css', 'css')
     .vue({ version: 3 })
     .nova("marshmallow/nova-date-range-filter");
 
