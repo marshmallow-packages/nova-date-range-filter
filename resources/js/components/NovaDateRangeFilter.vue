@@ -5,6 +5,43 @@
         </span>
 
         <template #filter>
+            <div
+                v-if="filter.ranges"
+                class="relative flex items-center justify-between mb-2"
+            >
+                <div class="relative flex w-full">
+                    <select
+                        v-model="currentRange"
+                        @change="setNewRange()"
+                        class="block w-full h-8 text-xs form-control form-control-bordered form-input"
+                    >
+                        <option selected="" value="">—</option>
+                        <option
+                            v-for="(range, index) in filter.ranges"
+                            :key="index"
+                            :value="index"
+                        >
+                            {{ range.name }}
+                        </option>
+                    </select>
+                    <span
+                        class="pointer-events-none absolute inset-y-0 right-[11px] flex items-center"
+                        ><svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 20 20"
+                            fill="currentColor"
+                            aria-hidden="true"
+                            data-slot="icon"
+                            class="w-5 h-5 text-gray-700 shrink-0 dark:text-gray-400"
+                        >
+                            <path
+                                fill-rule="evenodd"
+                                d="M5.22 8.22a.75.75 0 0 1 1.06 0L10 11.94l3.72-3.72a.75.75 0 1 1 1.06 1.06l-4.25 4.25a.75.75 0 0 1-1.06 0L5.22 9.28a.75.75 0 0 1 0-1.06Z"
+                                clip-rule="evenodd"
+                            ></path></svg
+                    ></span>
+                </div>
+            </div>
             <div class="relative flex items-center justify-between">
                 <input
                     class="w-full form-control form-input form-control-bordered"
@@ -62,7 +99,7 @@
             lens: String,
         },
 
-        data: () => ({ flatpickr: null }),
+        data: () => ({ flatpickr: null, currentRange: "" }),
 
         computed: {
             placeholder() {
@@ -96,9 +133,23 @@
                 return this.filter.currentValue || null;
             },
             filter() {
-                return this.$store.getters[`${this.resourceName}/getFilter`](
-                    this.filterKey
-                );
+                let filter = this.$store.getters[
+                    `${this.resourceName}/getFilter`
+                ](this.filterKey);
+                let ranges = filter.ranges;
+                if (ranges) {
+                    const match = ranges.findIndex(
+                        (range) =>
+                            range.start.startsWith(filter.currentValue[0]) &&
+                            range.end.startsWith(filter.currentValue[1])
+                    );
+
+                    if (match) {
+                        this.currentRange = match;
+                    }
+                }
+
+                return filter;
             },
             options() {
                 return this.$store.getters[
@@ -175,6 +226,26 @@
         },
 
         methods: {
+            setNewRange(event) {
+                let range = this.filter.ranges[this.currentRange];
+
+                this.updateFilterState(
+                    this.mapValues([
+                        this.formatDate(range.start),
+                        this.formatDate(range.end),
+                    ])
+                );
+
+                this.flatpickr.setDate([range.start, range.end], false);
+            },
+            formatDate(date) {
+                return new Date(date.replace(" ", "T") + "");
+            },
+            mapValues(range) {
+                return range.map((value) => {
+                    return flatpickr.formatDate(value, this.dateFormat);
+                });
+            },
             clear() {
                 this.flatpickr.clear();
                 this.handleChange([]);
@@ -183,14 +254,15 @@
                 return Array.isArray(value) && value.length == 0;
             },
             handleChange(event) {
-                let value = event.map((value) => {
-                    return flatpickr.formatDate(value, this.dateFormat);
-                });
+                let value = this.mapValues(event);
 
                 if (this.isEmptyArray(value)) {
                     value = "";
                 }
 
+                this.updateFilterState(value);
+            },
+            updateFilterState(value) {
                 this.$store.commit(`${this.resourceName}/updateFilterState`, {
                     filterClass: this.filterKey,
                     value,

@@ -4,7 +4,6 @@ namespace Marshmallow\Filters;
 
 use Carbon\Carbon;
 use Illuminate\Support\Arr;
-use Illuminate\Http\Request;
 use Laravel\Nova\Filters\Filter;
 use Laravel\Nova\Http\Requests\NovaRequest;
 
@@ -87,6 +86,19 @@ class DateRangeFilter extends Filter
         return $this;
     }
 
+    public function addRange(string $name, Carbon $start, Carbon $end)
+    {
+        $ranges = Arr::get($this->meta, 'ranges', []);
+        $ranges[] = [
+            'name' => $name,
+            'start' => $start->toDateTimeString(),
+            'end' => $end->toDateTimeString(),
+        ];
+
+        return $this->withMeta([
+            'ranges' => $ranges,
+        ]);
+    }
     public function options(NovaRequest $request)
     {
         return [
