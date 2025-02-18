@@ -22,7 +22,8 @@
 </template>
 <script>
     import flatpickr from "flatpickr";
-    require("flatpickr/dist/themes/airbnb.css");
+
+    require("flatpickr/dist/themes/light.css");
 
     export default {
         emits: ["change"],
@@ -167,8 +168,39 @@
         },
     };
 </script>
-<style scoped lang="scss">
+<style>
     .\!cursor-not-allowed {
         cursor: not-allowed !important;
+    }
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange,
+    .flatpickr-day.selected.inRange,
+    .flatpickr-day.startRange.inRange,
+    .flatpickr-day.endRange.inRange,
+    .flatpickr-day.selected:focus,
+    .flatpickr-day.startRange:focus,
+    .flatpickr-day.endRange:focus,
+    .flatpickr-day.selected:hover,
+    .flatpickr-day.startRange:hover,
+    .flatpickr-day.endRange:hover,
+    .flatpickr-day.selected.prevMonthDay,
+    .flatpickr-day.startRange.prevMonthDay,
+    .flatpickr-day.endRange.prevMonthDay,
+    .flatpickr-day.selected.nextMonthDay,
+    .flatpickr-day.startRange.nextMonthDay,
+    .flatpickr-day.endRange.nextMonthDay {
+        background: #0ca5e9;
+        border-color: #0ca5e9;
+    }
+
+    .flatpickr-monthDropdown-months,
+    .numInput.cur-year,
+    .flatpickr-current-month input.cur-year,
+    .flatpickr-current-month .flatpickr-monthDropdown-months {
+        font-size: 1rem;
+        line-height: 1rem;
+        font-weight: bold;
+        text-transform: uppercase;
     }
 </style>
