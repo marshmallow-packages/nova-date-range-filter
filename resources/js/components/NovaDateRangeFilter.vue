@@ -114,6 +114,15 @@
             modeType() {
                 return this.filter.mode === "range" ? "range" : "single";
             },
+            showMonths() {
+                return this.filter.showMonths ?? "1";
+            },
+            minTime() {
+                return this.filter.minTime ?? "00:00";
+            },
+            maxTime() {
+                return this.filter.maxTime ?? "23:59";
+            },
             dateFormat() {
                 return (
                     this.filter.dateFormat ||
@@ -148,6 +157,9 @@
                     dateFormat: this.dateFormat,
                     allowInput: true,
                     mode: this.modeType,
+                    showMonths: this.showMonths,
+                    minTime: this.minTime,
+                    maxTime: this.maxTime,
                     time_24hr: !this.twelveHourTime,
                     onReady() {
                         self.$refs.dateRangePicker.parentNode.classList.add(

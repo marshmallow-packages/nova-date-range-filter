@@ -3,9 +3,10 @@
 namespace Marshmallow\Filters;
 
 use Carbon\Carbon;
+use Illuminate\Support\Arr;
 use Illuminate\Http\Request;
-use Laravel\Nova\Http\Requests\NovaRequest;
 use Laravel\Nova\Filters\Filter;
+use Laravel\Nova\Http\Requests\NovaRequest;
 
 class DateRangeFilter extends Filter
 {
@@ -62,6 +63,24 @@ class DateRangeFilter extends Filter
         return $this;
     }
 
+    public function showMonths($months)
+    {
+        $this->withMeta(['showMonths' => $months]);
+        return $this;
+    }
+
+    public function minTime($minTime)
+    {
+        $this->withMeta(['minTime' => $minTime]);
+        return $this;
+    }
+
+    public function maxTime($maxTime)
+    {
+        $this->withMeta(['maxTime' => $maxTime]);
+        return $this;
+    }
+
     public function placeholder($placeholder)
     {
         $this->withMeta(['placeholder' => $placeholder]);
@@ -73,7 +92,7 @@ class DateRangeFilter extends Filter
         return [
             'firstDayOfWeek' => 1,
             'separator' => '-',
-            'enableTime' => false,
+            'enableTime' => Arr::get($this->meta, 'enableTime', false),
             'enableSeconds' => false,
             'twelveHourTime' => false,
             'mode' => 'range'
