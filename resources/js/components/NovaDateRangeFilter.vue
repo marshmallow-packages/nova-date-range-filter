@@ -5,18 +5,40 @@
         </span>
 
         <template #filter>
-            <input
-                class="form-control form-input form-control-bordered"
-                :disabled="disabled"
-                :class="{ '!cursor-not-allowed': disabled }"
-                :value="value"
-                :placeholder="placeholder"
-                ref="dateRangePicker"
-                name="date-range-filter"
-                autocomplete="off"
-                type="text"
-                :dusk="`${filter.name}-date-range-filter`"
-            />
+            <div class="relative flex items-center justify-between">
+                <input
+                    class="w-full form-control form-input form-control-bordered"
+                    :disabled="disabled"
+                    :class="{ '!cursor-not-allowed': disabled }"
+                    :value="value"
+                    :placeholder="placeholder"
+                    ref="dateRangePicker"
+                    name="date-range-filter"
+                    autocomplete="off"
+                    type="text"
+                    :dusk="`${filter.name}-date-range-filter`"
+                />
+                <button
+                    class="clear-button"
+                    @click="clear()"
+                    v-if="filter.currentValue"
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke-width="1.5"
+                        stroke="currentColor"
+                        class="w-6 h-6"
+                    >
+                        <path
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                            d="M12 9.75 14.25 12m0 0 2.25 2.25M14.25 12l2.25-2.25M14.25 12 12 14.25m-2.58 4.92-6.374-6.375a1.125 1.125 0 0 1 0-1.59L9.42 4.83c.21-.211.497-.33.795-.33H19.5a2.25 2.25 0 0 1 2.25 2.25v10.5a2.25 2.25 0 0 1-2.25 2.25h-9.284c-.298 0-.585-.119-.795-.33Z"
+                        />
+                    </svg>
+                </button>
+            </div>
         </template>
     </FilterContainer>
 </template>
@@ -141,10 +163,21 @@
         },
 
         methods: {
+            clear() {
+                this.flatpickr.clear();
+                this.handleChange([]);
+            },
+            isEmptyArray(value) {
+                return Array.isArray(value) && value.length == 0;
+            },
             handleChange(event) {
                 let value = event.map((value) => {
                     return flatpickr.formatDate(value, this.dateFormat);
                 });
+
+                if (this.isEmptyArray(value)) {
+                    value = "";
+                }
 
                 this.$store.commit(`${this.resourceName}/updateFilterState`, {
                     filterClass: this.filterKey,
@@ -160,7 +193,24 @@
     .\!cursor-not-allowed {
         cursor: not-allowed !important;
     }
-    .flatpickr-day.selected, .flatpickr-day.startRange, .flatpickr-day.endRange, .flatpickr-day.selected.inRange, .flatpickr-day.startRange.inRange, .flatpickr-day.endRange.inRange, .flatpickr-day.selected:focus, .flatpickr-day.startRange:focus, .flatpickr-day.endRange:focus, .flatpickr-day.selected:hover, .flatpickr-day.startRange:hover, .flatpickr-day.endRange:hover, .flatpickr-day.selected.prevMonthDay, .flatpickr-day.startRange.prevMonthDay, .flatpickr-day.endRange.prevMonthDay, .flatpickr-day.selected.nextMonthDay, .flatpickr-day.startRange.nextMonthDay, .flatpickr-day.endRange.nextMonthDay {
+    .flatpickr-day.selected,
+    .flatpickr-day.startRange,
+    .flatpickr-day.endRange,
+    .flatpickr-day.selected.inRange,
+    .flatpickr-day.startRange.inRange,
+    .flatpickr-day.endRange.inRange,
+    .flatpickr-day.selected:focus,
+    .flatpickr-day.startRange:focus,
+    .flatpickr-day.endRange:focus,
+    .flatpickr-day.selected:hover,
+    .flatpickr-day.startRange:hover,
+    .flatpickr-day.endRange:hover,
+    .flatpickr-day.selected.prevMonthDay,
+    .flatpickr-day.startRange.prevMonthDay,
+    .flatpickr-day.endRange.prevMonthDay,
+    .flatpickr-day.selected.nextMonthDay,
+    .flatpickr-day.startRange.nextMonthDay,
+    .flatpickr-day.endRange.nextMonthDay {
         background: #0ca5e9;
         border-color: #0ca5e9;
     }
@@ -173,5 +223,10 @@
         line-height: 1rem;
         font-weight: bold;
         text-transform: uppercase;
+    }
+
+    .clear-button {
+        position: absolute;
+        right: 6px;
     }
 </style>
