@@ -144,7 +144,7 @@
                             range.end.startsWith(filter.currentValue[1])
                     );
 
-                    if (match) {
+                    if (match !== -1) {
                         this.currentRange = match;
                     }
                 }
