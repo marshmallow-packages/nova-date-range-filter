@@ -248,6 +248,7 @@
             },
             clear() {
                 this.flatpickr.clear();
+                this.currentRange = "";
                 this.handleChange([]);
             },
             isEmptyArray(value) {
