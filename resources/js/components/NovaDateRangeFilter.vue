@@ -59,6 +59,7 @@
                     class="clear-button"
                     @click="clear()"
                     v-if="filter.currentValue"
+                    :title="translations.clear"
                 >
                     <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -84,6 +85,10 @@
 
     require("flatpickr/dist/themes/light.css");
 
+    // Import Flatpickr language modules for localization
+    import "flatpickr/dist/l10n/nl.js";
+    import "flatpickr/dist/l10n/uk.js";
+
     export default {
         emits: ["change"],
 
@@ -102,8 +107,18 @@
         data: () => ({ flatpickr: null, currentRange: "" }),
 
         computed: {
+            translations() {
+                return (
+                    this.filter.translations || {
+                        pickDateRange: "Pick a date range",
+                        clear: "Clear",
+                    }
+                );
+            },
             placeholder() {
-                return this.filter.placeholder || this.__("Pick a date range");
+                return (
+                    this.filter.placeholder || this.translations.pickDateRange
+                );
             },
             startDate() {
                 return flatpickr.formatDate(
@@ -192,6 +207,10 @@
             firstDayOfWeek() {
                 return this.filter.firstDayOfWeek || 0;
             },
+            locale() {
+                // Get the locale from the document or use English as fallback
+                return document.documentElement.lang || "en";
+            },
         },
 
         mounted() {
@@ -201,7 +220,7 @@
             });
 
             this.$nextTick(() => {
-                this.flatpickr = flatpickr(this.$refs.dateRangePicker, {
+                let config = {
                     enableTime: this.enableTime,
                     enableSeconds: this.enableSeconds,
                     onClose: this.handleChange,
@@ -221,7 +240,18 @@
                         rangeSeparator: ` ${this.separator} `,
                         firstDayOfWeek: this.firstDayOfWeek,
                     },
-                });
+                };
+
+                // If the current locale is supported by Flatpickr, use it
+                if (this.locale !== "en" && flatpickr.l10ns[this.locale]) {
+                    config.locale = {
+                        ...flatpickr.l10ns[this.locale],
+                        rangeSeparator: ` ${this.separator} `,
+                        firstDayOfWeek: this.firstDayOfWeek,
+                    };
+                }
+
+                this.flatpickr = flatpickr(this.$refs.dateRangePicker, config);
             });
         },
 

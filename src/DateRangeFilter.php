@@ -28,6 +28,8 @@ class DateRangeFilter extends Filter
     {
         $this->column = $column;
         $this->name = $name ?? $column;
+
+        $this->setTranslations();
     }
 
     /**
@@ -99,6 +101,18 @@ class DateRangeFilter extends Filter
             'ranges' => $ranges,
         ]);
     }
+
+    public function setTranslations()
+    {
+        return $this->withMeta([
+            'translations' => [
+                'pickDateRange' => __('nova-date-range-filter::date-range-filter.pick_date_range'),
+                'clear' => __('nova-date-range-filter::date-range-filter.clear'),
+            ]
+        ]);
+    }
+
+
     public function options(NovaRequest $request)
     {
         return [
@@ -107,7 +121,7 @@ class DateRangeFilter extends Filter
             'enableTime' => Arr::get($this->meta, 'enableTime', false),
             'enableSeconds' => false,
             'twelveHourTime' => false,
-            'mode' => 'range'
+            'mode' => 'range',
         ];
     }
 
@@ -128,6 +142,8 @@ class DateRangeFilter extends Filter
      */
     public function name()
     {
-        return __('Filter By ') . $this->name;
+        return __('nova-date-range-filter::date-range-filter.filter_by', [
+            'name' => $this->name,
+        ]);
     }
 }
