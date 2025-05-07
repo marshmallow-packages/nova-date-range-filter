@@ -63,13 +63,33 @@ Set a min time that can be selected.
 
 Set a max time that can be selected.
 
+### Localization
+
+The package supports localization for all text elements. The following translations are available out of the box:
+
+-   English (en)
+-   Dutch (nl)
+-   Ukrainian (uk)
+
+If your language doesn't work in the calendar interface (using Flatpickr localization) itself, please let us know and we will add your language.
+
+#### Customizing Translations
+
+You can publish the translation files to customize them for your application:
+
+```bash
+php artisan vendor:publish --tag=nova-date-range-filter-translations
+```
+
+This will copy the translation files to your application's `resources/lang/vendor/nova-date-range-filter` directory, where you can modify them or add new languages.
+
 ## Security
 
 If you discover any security related issues, please email stef@marshmallow.dev instead of using the issue tracker.
 
 ## Credits
 
-- [All Contributors](../../contributors)
+-   [All Contributors](../../contributors)
 
 ## License
 
