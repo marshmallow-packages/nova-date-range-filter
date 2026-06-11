@@ -51,6 +51,29 @@ With this method, you can set default date ranges that you use frequently. For i
 
 With this method, it will be possible to show more then just the current month.
 
+```php
+(new DateRangeFilter('created_at', 'Created date'))
+    ->showMonths(2),
+```
+
+#### dateFormat
+
+Override the date format used by the picker (Flatpickr format tokens).
+
+```php
+(new DateRangeFilter('created_at', 'Created date'))
+    ->dateFormat('Y-m-d'),
+```
+
+#### placeholder
+
+Set a custom placeholder for the filter input.
+
+```php
+(new DateRangeFilter('created_at', 'Created date'))
+    ->placeholder('Select a date range'),
+```
+
 #### enableTime (beta)
 
 Enable the time selector when you select your date.
